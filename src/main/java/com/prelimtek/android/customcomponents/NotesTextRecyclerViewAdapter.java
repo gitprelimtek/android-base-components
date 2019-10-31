@@ -3,6 +3,7 @@ package com.prelimtek.android.customcomponents;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +21,13 @@ public class NotesTextRecyclerViewAdapter extends RecyclerView.Adapter<NotesText
     public static final int PAGE_VISIBLE_SIZE = 2;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        View layout;
         TextView noteDateTextView;
         TextView noteTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
+            layout = itemView;
             noteDateTextView = (TextView) itemView.findViewById(R.id.notedate);
             noteTextView = (TextView)itemView.findViewById(R.id.noteText);
             itemView.setOnClickListener(onClickListener);
@@ -36,20 +38,21 @@ public class NotesTextRecyclerViewAdapter extends RecyclerView.Adapter<NotesText
         public void bindTo(NotesModel notesModel) {
             setDateValue(noteDateTextView,notesModel.getDate());
             noteTextView.setText(notesModel.noteText);
-            noteTextView.setTag(notesModel.getDate());
+            layout.setTag(notesModel);
         }
 
         public void clear() {
             noteDateTextView.setText(null);
             noteDateTextView.setTag(null);
             noteTextView.setText(null);
-            noteTextView.setTag(null);
+            layout.setTag(null);
         }
 
         //TODO put in util class
         public void setDateValue(TextView view,
                                         final Long newDate ){
-            view.setTag(newDate);
+
+            if(view==null)return;
             DateFormat dateFormat = Configuration.configuredPreferences(view.getContext()).dateFormat;
             if(newDate!=null) {
                 String newDateStr = dateFormat.format(new Date(newDate));
@@ -102,7 +105,7 @@ public class NotesTextRecyclerViewAdapter extends RecyclerView.Adapter<NotesText
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View convertView = inflator.inflate(R.layout.notes_list_layout,parent,false);
+        View convertView = inflator.inflate(layoutId,parent,false);
 
         ViewHolder holder = new NotesTextRecyclerViewAdapter.ViewHolder(convertView);
 
@@ -128,6 +131,5 @@ public class NotesTextRecyclerViewAdapter extends RecyclerView.Adapter<NotesText
     public NotesModel getItem(int position) {
         return rowItems.get(position);
     }
-
 
 }

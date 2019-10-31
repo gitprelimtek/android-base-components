@@ -9,7 +9,19 @@ import android.support.annotation.NonNull;
 
 public class TextListProcUtils {
 
-    public static void showOrRefreshNotesListFragment(@NonNull String modelId ,@NonNull int notes_list_framelayout, @NonNull FragmentManager childTransactionManager , @NonNull TextDAOInterface dbHelper, boolean editable){
+    public static void showOrRefreshNotesListFragment(@NonNull String modelId ,@NonNull int notes_list_framelayout, @NonNull FragmentManager childTransactionManager , @NonNull TextDAOInterface dbHelper, boolean editable) {
+        showOrRefreshNotesListFragment(modelId,notes_list_framelayout,childTransactionManager,dbHelper,null,null);
+    }
+
+    public static void showOrRefreshNotesListFragment(@NonNull String modelId ,@NonNull int notes_list_framelayout, @NonNull FragmentManager childTransactionManager , @NonNull TextDAOInterface dbHelper, NotesListDisplayFragment.OnNoteSelectedListener noteSelectedListener) {
+        showOrRefreshNotesListFragment(modelId,notes_list_framelayout,childTransactionManager,dbHelper,null,null);
+    }
+
+    public static void showOrRefreshNotesListFragment(@NonNull String modelId ,@NonNull int notes_list_framelayout, @NonNull FragmentManager childTransactionManager , @NonNull TextDAOInterface dbHelper, boolean editable, NotesListDisplayFragment.LayoutManagerDirection layoutManagerDirection) {
+        showOrRefreshNotesListFragment(modelId,notes_list_framelayout,childTransactionManager,dbHelper,null,layoutManagerDirection);
+    }
+
+    public static void showOrRefreshNotesListFragment(@NonNull String modelId ,@NonNull int notes_list_framelayout, @NonNull FragmentManager childTransactionManager , @NonNull TextDAOInterface dbHelper, NotesListDisplayFragment.OnNoteSelectedListener noteSelectedListener,NotesListDisplayFragment.LayoutManagerDirection layoutManagerDirection){
 
         //System.out.println("!!!!!!!!  showOrRefreshImageListFragment called -> currentImagesModel size ="+currentImagesModel.getImageNames().size());
 
@@ -22,6 +34,9 @@ public class TextListProcUtils {
 
         NotesListDisplayFragment notesListFragment = new NotesListDisplayFragment();
         notesListFragment.setDBHelper(dbHelper);
+        notesListFragment.setNoteSelectedListener(noteSelectedListener);
+        notesListFragment.setLayoutManagerDirection(layoutManagerDirection);
+
         Bundle imgBundle = new Bundle();
         imgBundle.putSerializable(NotesListDisplayFragment.MODEL_ID_KEY, modelId);
         notesListFragment.setArguments(imgBundle);
@@ -38,4 +53,5 @@ public class TextListProcUtils {
 
 
     }
+
 }
