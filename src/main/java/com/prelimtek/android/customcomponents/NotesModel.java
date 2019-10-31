@@ -8,11 +8,20 @@ import com.prelimtek.android.customcomponents.BR;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class NotesModel extends BaseObservable implements Serializable{
 
+public class NotesModel extends BaseObservable implements Serializable,Cloneable{
+
+    String id;
     long date;
     String noteText;
     String modelId;
+
+    public NotesModel(String id, long date,String modelId, String noteText){
+        this.id = id;
+        this.date = date;
+        this.modelId=modelId;
+        this.noteText=noteText;
+    }
 
     public NotesModel(long date,String modelId, String noteText){
         this.date = date;
@@ -53,7 +62,7 @@ public class NotesModel extends BaseObservable implements Serializable{
     @Override
     public int hashCode() {
 
-        return Objects.hash( date, modelId, noteText);
+        return Objects.hash(id, date, modelId, noteText);
     }
 
     @Override
@@ -73,6 +82,24 @@ public class NotesModel extends BaseObservable implements Serializable{
                 append("noteText").append(noteText).append("\n");
 
         return builder.toString();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Object createClone() {
+        try
+        {
+            return this.clone();
+        }catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

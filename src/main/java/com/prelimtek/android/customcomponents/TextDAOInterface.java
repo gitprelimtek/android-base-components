@@ -10,4 +10,12 @@ public interface TextDAOInterface {
 
     public List<NotesModel> getNotes(String modelId, Long beforeThisDate, Long afterThisDate,  int rowCount, int pageOffset);
 
+    public NotesModel getNotesById(String s);
+
+    public boolean updateNote(NotesModel note);
+
+    public boolean deleteNotes(NotesModel notes);
+
+    public int getNotesCount(String id);
+
 }
