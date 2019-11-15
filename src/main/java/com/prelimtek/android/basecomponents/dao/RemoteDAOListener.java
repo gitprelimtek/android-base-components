@@ -1,10 +1,8 @@
-package io.mtini.model;
+package com.prelimtek.android.basecomponents.dao;
 
-import io.mtini.proto.EATRequestResponseProtos;
+public interface RemoteDAOListener <T>{
 
-public interface RemoteDAOListener {
-
-    void onRequestComplete(EATRequestResponseProtos.EATRequestResponse.Response response);
+    void onRequestComplete(T response);
 
     void onError(Throwable e);
 
