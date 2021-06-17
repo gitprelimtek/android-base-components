@@ -16,5 +16,6 @@
 
     <string name="passphrase_hint">Password</string>
     <string name="verify_passphrase_hint">Verify Password</string>
+    <string name="username_hint">create a user handle</string>
 
 </resources>

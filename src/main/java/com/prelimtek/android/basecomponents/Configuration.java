@@ -41,7 +41,7 @@ public class Configuration {
 
     public static final String walletAddressKey = "walletAddress";
 
-    public static final String userIdKey = "id";
+    public static final String customerIdKey = "id";
 
     public static final String DEFAULT_AUTH_SERVICE = "None";
 
@@ -98,7 +98,7 @@ public class Configuration {
 
         //server-side gets
         conf.apikey  = pref.getString(Configuration.preferences_jwt_key, null);
-        conf.customerId = pref.getString(userIdKey, null);
+        conf.customerId = pref.getString(customerIdKey, null);
         //conf.walletJson = pref.getString(walletAddressKey,null);
 
         //presets
