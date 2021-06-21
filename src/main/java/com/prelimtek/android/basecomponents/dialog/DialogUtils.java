@@ -41,7 +41,9 @@ public class DialogUtils {
         return dialog;
     }
 
+
     public static void startErrorDialogRunnable( Activity activity, final String message, boolean autocancel){
+
         final Context context = activity.getBaseContext();
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -60,6 +62,7 @@ public class DialogUtils {
     }
 
     public static AlertDialog startErrorDialog(Context context, String message,boolean autocancel){
+
         if(Looper.myLooper()==null)Looper.prepare();
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
@@ -74,7 +77,9 @@ public class DialogUtils {
 
 
         AlertDialog errorDialog = dialogBuilder.create();
+
         errorDialog.setCanceledOnTouchOutside(autocancel);
+
         errorDialog.show();
         return errorDialog;
     }
