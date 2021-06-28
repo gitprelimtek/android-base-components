@@ -17,8 +17,12 @@ public class DisplayAlertsBroadcastReceiver extends BroadcastReceiver {
     public static final String DISPLAY_ALERT_ACTION = "com.ptek.DisplayAlertsBroadcastReceiver_Action";
     public static final String DISPLAY_ALERT_TYPE_KEY = DisplayAlertsBroadcastReceiver.class.getName()+"_TYPE_KEY";
     public static final String DISPLAY_ALERT_MESSAGE_KEY = DisplayAlertsBroadcastReceiver.class.getName()+"_MESSAGE_KEY";
+    public static final String DISPLAY_ALERT_PROGRESS_KEY = DisplayAlertsBroadcastReceiver.class.getName()+"_PROGRESS_KEY";
     public static final String DISPLAY_ALERT_ERROR_MESSAGE_TYPE = "DisplayAlertsBroadcastReceiver_ERROR_MESSAGE_TYPE";
     public static final String DISPLAY_ALERT_NORMAL_MESSAGE_TYPE = "DisplayAlertsBroadcastReceiver_NORMAL_MESSAGE_TYPE";
+    public static final String DISPLAY_ALERT_SHOW_PROGRESS_TYPE = "DisplayAlertsBroadcastReceiver_SHOW_PROGRESS__TYPE";
+    public static final String DISPLAY_ALERT_HIDE_PROGRESS_TYPE = "DisplayAlertsBroadcastReceiver_HIDE_PROGRESS__TYPE";
+    public static final String DISPLAY_ALERT_UPDATE_PROGRESS_TYPE = "DisplayAlertsBroadcastReceiver_UPDATE_PROGRESS__TYPE";
 
     AppReceiver appReceiver;
     public DisplayAlertsBroadcastReceiver(
@@ -55,6 +59,27 @@ public class DisplayAlertsBroadcastReceiver extends BroadcastReceiver {
         Intent intent = new Intent(DISPLAY_ALERT_ACTION);
         intent.putExtra(DISPLAY_ALERT_MESSAGE_KEY,message);
         intent.putExtra(DISPLAY_ALERT_TYPE_KEY, DISPLAY_ALERT_ERROR_MESSAGE_TYPE);
+        context.sendBroadcast(intent);
+    }
+
+    public static void startGenericProgress(Context context,String message){
+        Intent intent = new Intent(DISPLAY_ALERT_ACTION);
+        intent.putExtra(DISPLAY_ALERT_MESSAGE_KEY,message);
+        intent.putExtra(DISPLAY_ALERT_TYPE_KEY, DISPLAY_ALERT_SHOW_PROGRESS_TYPE);
+        context.sendBroadcast(intent);
+    }
+
+    public static void updateProgress(Context context,String message, int progress){
+        Intent intent = new Intent(DISPLAY_ALERT_ACTION);
+        intent.putExtra(DISPLAY_ALERT_MESSAGE_KEY,message);
+        intent.putExtra(DISPLAY_ALERT_PROGRESS_KEY,progress);
+        intent.putExtra(DISPLAY_ALERT_TYPE_KEY, DISPLAY_ALERT_UPDATE_PROGRESS_TYPE);
+        context.sendBroadcast(intent);
+    }
+
+    public static void stopProgress(Context context){
+        Intent intent = new Intent(DISPLAY_ALERT_ACTION);
+        intent.putExtra(DISPLAY_ALERT_TYPE_KEY, DISPLAY_ALERT_HIDE_PROGRESS_TYPE);
         context.sendBroadcast(intent);
     }
 

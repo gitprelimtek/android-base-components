@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.prelimtek.android.customcomponents.R;
@@ -77,7 +79,8 @@ public class DialogUtils {
 
 
         AlertDialog errorDialog = dialogBuilder.create();
-
+        errorDialog.getWindow().setType(WindowManager.LayoutParams.LAST_APPLICATION_WINDOW);
+        //errorDialog.getWindow().setGravity(Gravity.TOP);
         errorDialog.setCanceledOnTouchOutside(autocancel);
 
         errorDialog.show();
