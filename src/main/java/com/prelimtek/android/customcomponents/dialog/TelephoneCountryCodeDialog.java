@@ -47,11 +47,13 @@ public class TelephoneCountryCodeDialog extends AlertDialog {
 
         final TextView phoneNumberTextView = (TextView)view.findViewById(R.id.selectedTelephoneTextView);
 
+        final TextView coutryTextView = (TextView)view.findViewById(R.id.selectedCountryTextView);
+
         View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 //spinner.drop
-                componentValuesChanged(spinner, sufTelEditText, phoneNumberTextView);
+                componentValuesChanged(spinner, sufTelEditText,coutryTextView, phoneNumberTextView);
             }
         };
 
@@ -60,7 +62,7 @@ public class TelephoneCountryCodeDialog extends AlertDialog {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                componentValuesChanged(spinner, sufTelEditText, phoneNumberTextView);
+                componentValuesChanged(spinner, sufTelEditText,coutryTextView, phoneNumberTextView);
             }
 
             @Override
@@ -87,7 +89,7 @@ public class TelephoneCountryCodeDialog extends AlertDialog {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        componentValuesChanged(spinner, sufTelEditText, phoneNumberTextView);
+                        componentValuesChanged(spinner, sufTelEditText,coutryTextView, phoneNumberTextView);
                     }
                 },500);
             }
@@ -128,7 +130,7 @@ public class TelephoneCountryCodeDialog extends AlertDialog {
         return 0;
     }
 
-    private void componentValuesChanged(Spinner spinner, EditText editText, TextView textView){
+    private void componentValuesChanged(Spinner spinner, EditText editText,TextView countryTextView, TextView phoneTextView){
 
         String spinnerVal = spinner.getSelectedItem().toString();
         addCountryCodePreference(spinnerVal);
@@ -140,7 +142,8 @@ public class TelephoneCountryCodeDialog extends AlertDialog {
         String phoneText = editText.getText().toString();
 
         //textView.setText(String.join(" ",countryCode,phoneText));
-        textView.setText(countryCode+" "+phoneText);
+        phoneTextView.setText(countryCode+" "+phoneText);
+        countryTextView.setText(countryInitials);
     }
 
     public void addCountryCodePreference(String val){

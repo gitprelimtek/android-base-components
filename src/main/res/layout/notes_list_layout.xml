@@ -14,13 +14,16 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black"
-        android:id="@+id/notedate" />
+        android:id="@+id/notedate"
+        />
 
-    <TextView
+    <com.prelimtek.android.customcomponents.view.ExpandableTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black"
-        android:id="@+id/noteText" />
+        android:id="@+id/noteText"
+        android:maxLines="1"
+        />
 
 </LinearLayout>

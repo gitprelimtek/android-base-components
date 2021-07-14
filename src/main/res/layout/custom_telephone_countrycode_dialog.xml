@@ -4,13 +4,25 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:id="@+id/custom_telephone_countrycode_view"
-    >
+    android:id="@+id/custom_telephone_countrycode_view">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/selectedTelephoneTextView"/>
+        android:padding="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:id="@+id/selectedCountryTextView"/>
+
+        <TextView
+         android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_toRightOf="@+id/selectedCountryTextView"
+            android:id="@+id/selectedTelephoneTextView"/>
+    </RelativeLayout>
 
     <TableLayout
         android:layout_width="wrap_content"
@@ -43,10 +55,6 @@
 
         </TableRow>
     </TableLayout>
-
-
-
-
 
 
 </LinearLayout>

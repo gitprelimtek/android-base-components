@@ -9,10 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,32 +130,47 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
 
         Log.i(TAG, "showProgress " + message);
         //hideProgress();
+        /*if(Looper.myLooper()==null)Looper.prepare();
+
+         */
+
         if(Looper.myLooper()==null)Looper.prepare();
-        if (progressDialog == null){
-            AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
-            LayoutInflater inflater = getLayoutInflater();
-            builder.setView(inflater.inflate(R.layout.process_running_layout_2, null));
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                /*
+                if(progressDialog==null) {
 
-            progressDialog = builder.create();
-        }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
+                    LayoutInflater inflater = getLayoutInflater();
+                    builder.setView(inflater.inflate(R.layout.process_running_layout_2, null));
 
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+                    progressDialog = builder.create();
 
-        bar = progressDialog.findViewById(R.id.progress_bar);
-        bar.setVisibility(View.VISIBLE);
-        bar.setMax(100);
-        bar.bringToFront();
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
 
-        progressTextView  = progressDialog.findViewById(R.id.process_errorMessage);
-        progressTextView.setText(message);
+                    bar = progressDialog.findViewById(R.id.progress_bar);
+                    bar.setVisibility(View.VISIBLE);
+                    bar.setMax(100);
+                    bar.bringToFront();
 
-        //progressDialog = DialogUtils.startProgressDialog(currentActivity,message);
+                    progressTextView = progressDialog.findViewById(R.id.process_errorMessage);
+                }
+                progressTextView.setText(message);
+                */
 
+
+
+                progressDialog = DialogUtils.startProgressDialog(currentActivity, message);
+
+            }
+        });
     }
 
     private void updateProgress(String message, int progress){
-        if(progressDialog==null || !progressDialog.isShowing() || bar==null){
+        Log.i(TAG, "updateProgress " + message);
+        /*if(progressDialog==null || !progressDialog.isShowing() || bar==null){
             showProgress(message);
         }
         progressTextView.setText(message);
@@ -165,10 +178,32 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
             bar.setProgress(progress,true);
         }else{
             bar.setProgress(progress);
+        }*/
+
+       /* if(progressDialog==null || !progressDialog.isShowing()){
+            showProgress(message);
+        }else{
+            progressTextView.setText(message);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                bar.setProgress(progress,true);
+            }else {
+                bar.setProgress(progress);
+            }
         }
+*/
+        if(Looper.myLooper()==null)Looper.prepare();
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (progressDialog == null || !progressDialog.isShowing() || bar == null) {
+                    //showProgress(message);
+                } else
+                    progressDialog.setTitle("Update .... " + message);
+            }});
     }
 
     private void hideAlertDialog() {
+        Log.i(TAG, "hideAlertDialog " );
         if(errorDialog!=null //&& errorDialog.isShowing()
          ) {
             errorDialog.dismiss();
@@ -178,13 +213,20 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
     }
 
     private void hideProgress(){
-        if(progressDialog!=null //&& progressDialog.isShowing()
-        ) {
-            progressDialog.dismiss();
-        }
-        bar = null;
-        progressTextView = null;
-        progressDialog = null;
+        if(Looper.myLooper()==null)Looper.prepare();
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "hideProgress progressDialog=" + progressDialog);
+                if (progressDialog != null //&& progressDialog.isShowing()
+                ) {
+                    progressDialog.dismiss();
+                }
+                //bar = null;
+                //progressTextView = null;
+                progressDialog = null;
+                Log.i(TAG, "hideProgress complete progressDialog=" + progressDialog);
+            }});
     }
 
 
