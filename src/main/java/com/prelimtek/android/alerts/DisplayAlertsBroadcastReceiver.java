@@ -24,6 +24,9 @@ public class DisplayAlertsBroadcastReceiver extends BroadcastReceiver {
     public static final String DISPLAY_ALERT_HIDE_PROGRESS_TYPE = "DisplayAlertsBroadcastReceiver_HIDE_PROGRESS__TYPE";
     public static final String DISPLAY_ALERT_UPDATE_PROGRESS_TYPE = "DisplayAlertsBroadcastReceiver_UPDATE_PROGRESS__TYPE";
 
+    //just added this because Manifest was complaining
+    public DisplayAlertsBroadcastReceiver(){}
+
     AppReceiver appReceiver;
     public DisplayAlertsBroadcastReceiver(
                                           AppReceiver receiver) {

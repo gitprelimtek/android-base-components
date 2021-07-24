@@ -115,10 +115,16 @@ public class Configuration {
         String remoteServerPort = defaultPrefs.getString("remoteServerPort",null);
         String remoteServer = defaultPrefs.getString("remoteServer",null);
 
+
+
         if(sslEnabled){
             conf.remoteHostUrl="https://"+remoteServer+":"+remoteServerPort+"/";
+            conf.remoteZMQUrl="https://"+remoteServer+":5562";
+            conf.remoteMqttUrl="https://"+remoteServer+":1883";
         }else{
             conf.remoteHostUrl="http://"+remoteServer+":"+remoteServerPort+"/";
+            conf.remoteZMQUrl="tcp://"+remoteServer+":5562";
+            conf.remoteMqttUrl="ws://"+remoteServer+":1883";
         }
         return conf;
     }
@@ -154,6 +160,8 @@ public class Configuration {
     }
 
     public String remoteHostUrl;
+    public String remoteZMQUrl;
+    public String remoteMqttUrl;
     public String customerId;
     public String apikey;
     public String userEmail;
