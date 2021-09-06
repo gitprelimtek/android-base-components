@@ -33,12 +33,12 @@
             android:defaultValue="@string/eat_app_server"/>
 
         <EditTextPreference
-            android:key="remoteServerPort"
-            android:summary="Remote server port"
+            android:key="queueBroker"
+            android:summary="Remote server"
             android:requiresFadingEdge="horizontal"
-            android:title="Remote server Port"
+            android:title="Queue broker"
             android:editable="true"
-            android:defaultValue="@string/eat_app_server_port"/>
+            android:defaultValue="@string/queue_broker"/>
 
         <SwitchPreference
             android:key="remoteServerTLSEnabled"

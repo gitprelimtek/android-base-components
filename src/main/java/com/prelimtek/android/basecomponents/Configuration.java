@@ -63,6 +63,8 @@ public class Configuration {
 
     public static int imageDialogMaxWidth = 1000;
 
+    public static boolean tlsEnabled=false;
+
     public enum SUPPORTED_AUTH_SERVICE{
         none,facebook,mtini,firebase
     }
@@ -108,15 +110,16 @@ public class Configuration {
         conf.currencyCode = defaultPrefs.getString("base_currency","USD");
         conf.dateFormatStr = defaultPrefs.getString("date_format","yyyy/MM/dd");
         conf.dateFormat = new SimpleDateFormat(conf.dateFormatStr);
-        //conf.userEmail = pref.getString("", null);
-        //conf.phoneNumber = pref.getString("", null);
 
-        Boolean sslEnabled = defaultPrefs.getBoolean("remoteServerTLSEnabled",false);
-        String remoteServerPort = defaultPrefs.getString("remoteServerPort",null);
+        Boolean tlsEnabled = defaultPrefs.getBoolean("remoteServerTLSEnabled",false);
+        //String remoteServerPort = defaultPrefs.getString("remoteServerPort",null);
         String remoteServer = defaultPrefs.getString("remoteServer",null);
+        String queueBroker = defaultPrefs.getString("queueBroker",null);
 
-
-
+        conf.remoteHostUrl=remoteServer;
+        conf.remoteMqttUrl=queueBroker;
+        conf.tlsEnabled=tlsEnabled;
+        /*
         if(sslEnabled){
             conf.remoteHostUrl="https://"+remoteServer+":"+remoteServerPort+"/";
             conf.remoteZMQUrl="https://"+remoteServer+":5562";
@@ -126,6 +129,8 @@ public class Configuration {
             conf.remoteZMQUrl="tcp://"+remoteServer+":5562";
             conf.remoteMqttUrl="ws://"+remoteServer+":1883";
         }
+        */
+
         return conf;
     }
 
@@ -160,7 +165,6 @@ public class Configuration {
     }
 
     public String remoteHostUrl;
-    public String remoteZMQUrl;
     public String remoteMqttUrl;
     public String customerId;
     public String apikey;
