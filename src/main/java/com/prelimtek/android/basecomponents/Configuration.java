@@ -119,17 +119,6 @@ public class Configuration {
         conf.remoteHostUrl=remoteServer;
         conf.remoteMqttUrl=queueBroker;
         conf.tlsEnabled=tlsEnabled;
-        /*
-        if(sslEnabled){
-            conf.remoteHostUrl="https://"+remoteServer+":"+remoteServerPort+"/";
-            conf.remoteZMQUrl="https://"+remoteServer+":5562";
-            conf.remoteMqttUrl="https://"+remoteServer+":1883";
-        }else{
-            conf.remoteHostUrl="http://"+remoteServer+":"+remoteServerPort+"/";
-            conf.remoteZMQUrl="tcp://"+remoteServer+":5562";
-            conf.remoteMqttUrl="ws://"+remoteServer+":1883";
-        }
-        */
 
         return conf;
     }
