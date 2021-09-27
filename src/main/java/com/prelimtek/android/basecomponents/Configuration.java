@@ -65,6 +65,8 @@ public class Configuration {
 
     public static boolean tlsEnabled=false;
 
+    public static boolean networkRequired=false;
+
     public enum SUPPORTED_AUTH_SERVICE{
         none,facebook,mtini,firebase
     }
@@ -119,6 +121,7 @@ public class Configuration {
         conf.remoteHostUrl=remoteServer;
         conf.remoteMqttUrl=queueBroker;
         conf.tlsEnabled=tlsEnabled;
+        conf.networkRequired = defaultPrefs.getBoolean("networkRequired",Boolean.FALSE);
 
         return conf;
     }
