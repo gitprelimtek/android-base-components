@@ -24,27 +24,6 @@
             android:editable="false"
             android:title="Service Email"/>
 
-        <EditTextPreference
-            android:key="remoteServer"
-            android:summary="Remote server"
-            android:requiresFadingEdge="horizontal"
-            android:title="Remote server"
-            android:editable="true"
-            android:defaultValue="@string/eat_app_server"/>
-
-        <EditTextPreference
-            android:key="queueBroker"
-            android:summary="Remote server"
-            android:requiresFadingEdge="horizontal"
-            android:title="Queue broker"
-            android:editable="true"
-            android:defaultValue="@string/queue_broker"/>
-
-        <SwitchPreference
-            android:key="remoteServerTLSEnabled"
-            android:defaultValue="false"
-            android:title="TLS Enabled?"/>
-
     </PreferenceCategory>
 
     <PreferenceCategory

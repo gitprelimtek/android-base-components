@@ -10,7 +10,7 @@ import androidx.lifecycle.LiveData;
 
 import com.prelimtek.android.basecomponents.dao.BaseDAOFactory;
 
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 public class NotesViewModel extends AndroidViewModel {
@@ -53,6 +53,6 @@ public class NotesViewModel extends AndroidViewModel {
     }
 
     public List<NotesModel> getAllLocalNotes(Long beforeDate, Long afterDate, int pageBufferSize, int offset) {
-        return localDao.getNotes(modelId, beforeDate,afterDate, pageBufferSize, offset);
+        return modelId==null?Collections.emptyList():localDao.getNotes(modelId, beforeDate,afterDate, pageBufferSize, offset);
     }
 }

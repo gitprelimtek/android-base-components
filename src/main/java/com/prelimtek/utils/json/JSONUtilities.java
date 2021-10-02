@@ -1,4 +1,4 @@
-package com.ptek.utils.json;
+package com.prelimtek.utils.json;
 
 import java.util.Iterator;
 

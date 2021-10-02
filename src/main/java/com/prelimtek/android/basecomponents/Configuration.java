@@ -84,11 +84,9 @@ public class Configuration {
     }
 
     public SharedPreferences.Editor edit() {
-
         SharedPreferences pref = context.getApplicationContext().getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         return editor;
-        //return this;
     }
 
     public static SharedPreferences preferences(Context context) {
@@ -113,14 +111,10 @@ public class Configuration {
         conf.dateFormatStr = defaultPrefs.getString("date_format","yyyy/MM/dd");
         conf.dateFormat = new SimpleDateFormat(conf.dateFormatStr);
 
-        Boolean tlsEnabled = defaultPrefs.getBoolean("remoteServerTLSEnabled",false);
-        //String remoteServerPort = defaultPrefs.getString("remoteServerPort",null);
-        String remoteServer = defaultPrefs.getString("remoteServer",null);
-        String queueBroker = defaultPrefs.getString("queueBroker",null);
+        conf.tlsEnabled= defaultPrefs.getBoolean("remoteServerTLSEnabled",false);
+        conf.remoteHostUrl = defaultPrefs.getString("remoteServer",null);
+        conf.remoteMqttUrl = defaultPrefs.getString("queueBroker",null);
 
-        conf.remoteHostUrl=remoteServer;
-        conf.remoteMqttUrl=queueBroker;
-        conf.tlsEnabled=tlsEnabled;
         conf.networkRequired = defaultPrefs.getBoolean("networkRequired",Boolean.FALSE);
 
         return conf;
@@ -166,7 +160,6 @@ public class Configuration {
     public String dateFormatStr;
     public SimpleDateFormat dateFormat;
     public String authService;
-    public String walletJson;
     public String versionName;
     public int versionCode;
 
