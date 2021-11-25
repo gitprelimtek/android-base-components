@@ -6,33 +6,70 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Looper;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 import com.prelimtek.android.customcomponents.R;
 
 
 public class DialogUtils {
 
-    public static Dialog startProgressDialog(Context context){
-        return startProgressDialog(context,"Loading. Please wait...");
+    public static Dialog startProgressDialog(Context context , String message){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+           return createProgressDialog(context,message);
+        }else{
+           return createProgressDialog_1(context,message);
+        }
+    }
+
+    public static Dialog startProgressDialog(Context context ){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return createProgressDialog(context,"");
+        }else{
+            return createProgressDialog_1(context,"");
+        }
     }
 
     public static void startProgressDialogRunnable(final Activity context, final String message){
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                startProgressDialog(context,message);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    createProgressDialog(context,message);
+                }else{
+                    createProgressDialog_1(context,message);
+                }
             }
         });
     }
 
-    public static Dialog startProgressDialog(Context context, String message) {
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    protected static Dialog createProgressDialog(Context context, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(R.layout.process_running_layout_2);
+
+        //AlertDialog dialog = builder.create();
+        Dialog dialog = new Dialog(context,R.style.PtekGenericDialog);
+        dialog.setContentView(R.layout.process_running_layout_2);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView messageView = dialog.findViewById(R.id.process_message);
+        if(messageView!=null)messageView.setText(message);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        return dialog;
+    }
+
+    protected static Dialog createProgressDialog_1(Context context, String message) {
         ProgressBar bar = new ProgressBar(context);
-        //bar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(bar);
         builder.setMessage(message);
@@ -50,7 +87,11 @@ public class DialogUtils {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                startErrorDialog(activity,message, autocancel);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                     startErrorDialog(context,message,autocancel);
+                }else{
+                     startErrorDialog_1(context,message,autocancel);
+                }
             }
         });
     }
@@ -59,11 +100,15 @@ public class DialogUtils {
         startErrorDialogRunnable(activity,message,true);
     }
 
-    public static AlertDialog startErrorDialog(Context context, String message){
-        return startErrorDialog(context,message,true);
+    public static Dialog startErrorDialog(Context context, String message){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return startErrorDialog(context,message,true);
+        }else{
+            return startErrorDialog_1(context,message,true);
+        }
     }
 
-    public static AlertDialog startErrorDialog(Context context, String message,boolean autocancel){
+    public static AlertDialog startErrorDialog_1(Context context, String message,boolean autocancel){
 
         if(Looper.myLooper()==null)Looper.prepare();
 
@@ -77,6 +122,81 @@ public class DialogUtils {
             }
         });
 
+        AlertDialog errorDialog = dialogBuilder.create();
+        errorDialog.getWindow().setType(WindowManager.LayoutParams.LAST_APPLICATION_WINDOW);
+        //errorDialog.getWindow().setGravity(Gravity.TOP);
+        errorDialog.setCanceledOnTouchOutside(autocancel);
+
+        errorDialog.show();
+        return errorDialog;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static Dialog startErrorDialog(Context context, String message, boolean autocancel){
+        return createGenericInfoDialog(context,R.string.error_message,R.drawable.sad_cloud_100,"",message,autocancel);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static Dialog createGenericInfoDialog(Context context, int title_id, int icon_id, String message, String errorMessage, boolean autocancel){
+
+        if(Looper.myLooper()==null)Looper.prepare();
+
+        /*
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setView(R.layout.generic_info_dialog_layout);
+        //TODO add icon dialogBuilder.setIcon()
+        dialogBuilder.setTitle(title_id);
+        dialogBuilder.setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        */
+
+        //Dialog errorDialog = dialogBuilder.create();
+        //errorDialog.getWindow().setType(WindowManager.LayoutParams.LAST_APPLICATION_WINDOW);
+        Dialog errorDialog = new Dialog(context,R.style.PtekGenericDialog);
+        errorDialog.setTitle(title_id);
+        errorDialog.setContentView(R.layout.generic_info_dialog_layout);
+        errorDialog.setCancelable(true);
+        errorDialog.setCanceledOnTouchOutside(autocancel);
+        errorDialog.show();
+
+        ImageView iconView = errorDialog.findViewById(R.id.generic_icon);
+        if(icon_id>0) {
+            Drawable icon = context.getResources().getDrawable(icon_id);
+            if (iconView != null && icon != null) iconView.setImageDrawable(icon);
+        }
+        TextView errorTxtView = errorDialog.findViewById(R.id.generic_errorMessage);
+        if(errorTxtView!=null)errorTxtView.setText(errorMessage);
+
+        TextView msgTxtView = errorDialog.findViewById(R.id.generic_message);
+        if(msgTxtView!=null)msgTxtView.setText(message);
+
+
+        return errorDialog;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static Dialog startNetworkErrorDialog(Context context, String message, boolean autocancel){
+        return createGenericInfoDialog(context,R.string.error_message,R.drawable.sad_cloud_100,"",message,autocancel);
+    }
+
+    public static AlertDialog createErrorDialog_1(Context context, String message,boolean autocancel){
+
+        if(Looper.myLooper()==null)Looper.prepare();
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        //TODO add icon dialogBuilder.setIcon()
+        dialogBuilder.setMessage(message)
+                .setTitle(R.string.error_message);
+        dialogBuilder.setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
 
         AlertDialog errorDialog = dialogBuilder.create();
         errorDialog.getWindow().setType(WindowManager.LayoutParams.LAST_APPLICATION_WINDOW);

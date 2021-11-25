@@ -6,6 +6,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.prelimtek.android.alerts.DisplayAlertsBroadcastReceiver;
+
 public class AppNetworkStatus {
 
     private static final String TAG = AppNetworkStatus.class.getSimpleName();
@@ -34,7 +36,8 @@ public class AppNetworkStatus {
 
     public void networkIsRequired(boolean required){
         if(required && !isOnline()){
-            redirectToNoNetworkPage();
+            //redirectToNoNetworkPage();
+            DisplayAlertsBroadcastReceiver.sendNetworkErrorMessage(context,"Network connectivity is bad. Enable your network and try again.");
         }
     }
 

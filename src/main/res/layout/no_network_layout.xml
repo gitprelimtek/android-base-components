@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="40dp"
-        android:text="@string/network_not_available"
+        android:text="@string/network_not_available_dialog_message"
         android:textColor="@color/Red_700"
         android:textSize="18dp"
         android:textStyle="bold" />

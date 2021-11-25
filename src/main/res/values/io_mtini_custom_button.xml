@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="io_mtini_custom_button_background_color">#fffffe</color>
-    <color name="io_mtini_custom_button_text_color">#ff00796b</color>
-    <color name="io_mtini_deactivate_custom_button_text_color">#77777777</color>
-    <color name="io_mtini_deactivate_custom_button_background_color">#ff77796b</color>
+    <color name="io_mtini_custom_button_background_color">#5D9A87</color>
+    <color name="io_mtini_custom_button_text_color">#F7FAF9</color>
+    <color name="io_mtini_deactivate_custom_button_text_color">#4FFBFBFB</color>
+    <color name="io_mtini_deactivate_custom_button_background_color">#5C4DB6AC</color>
 </resources>

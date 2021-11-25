@@ -28,5 +28,15 @@
             android:layout_gravity="center"
             android:layout_below="@+id/progress_bar"/>
 
+        <TextView
+            android:id="@+id/process_message"
+            android:textColor="@color/Teal_700"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_below="@+id/process_errorMessage"/>
+
     </RelativeLayout>
 </FrameLayout>

@@ -56,7 +56,7 @@ public class TelephoneActionDialogFragment extends DialogFragment {
 
         final String phoneNumber = telephoneNumberArg;
 
-    View whatsappMessageButton = view.findViewById(R.id.whatsapp_icon_btn);
+        View whatsappMessageButton = view.findViewById(R.id.whatsapp_icon_btn);
         whatsappMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

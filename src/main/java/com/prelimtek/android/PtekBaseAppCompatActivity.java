@@ -67,6 +67,9 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_ERROR_MESSAGE_TYPE:
                                 showError(message==null?null:message.toString());
                                 break;
+                            case DisplayAlertsBroadcastReceiver.DISPLAY_NETWORK_ALERT_ERROR_MESSAGE_TYPE:
+                                showNetworkError(message==null?null:message.toString());
+                                break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_NORMAL_MESSAGE_TYPE:
                                 showSnackBarMessage(message==null?null:message.toString());
                                 break;
@@ -114,6 +117,14 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
     }
 
     private Dialog errorDialog;
+    private void showNetworkError(String message){
+        Log.i(TAG,"callbackError "+message);
+
+        if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
+        errorDialog= DialogUtils.startErrorDialog(currentActivity,message);
+        //DialogUtils.startErrorDialogRunnable(currentActivity,message,false);
+
+    }
     private void showError(String message){
         Log.i(TAG,"callbackError "+message);
 
