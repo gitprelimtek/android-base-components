@@ -16,7 +16,6 @@ public class Configuration {
 
     static{
         //TODO read config file
-
     }
 
     /** 24 hours */
@@ -67,6 +66,8 @@ public class Configuration {
 
     public static boolean networkRequired=false;
 
+    public static boolean uiDarkMode=false;
+
     public enum SUPPORTED_AUTH_SERVICE{
         none,facebook,mtini,firebase
     }
@@ -116,6 +117,7 @@ public class Configuration {
         conf.remoteMqttUrl = defaultPrefs.getString("queueBroker",null);
 
         conf.networkRequired = defaultPrefs.getBoolean("networkRequired",Boolean.FALSE);
+        conf.uiDarkMode = defaultPrefs.getBoolean("uiDarkMode",Boolean.FALSE);
 
         return conf;
     }

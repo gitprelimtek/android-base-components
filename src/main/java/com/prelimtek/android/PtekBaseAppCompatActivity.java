@@ -1,26 +1,25 @@
 package com.prelimtek.android;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.UiModeManager;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.prelimtek.android.alerts.DisplayAlertsBroadcastReceiver;
+import com.prelimtek.android.basecomponents.Configuration;
 import com.prelimtek.android.basecomponents.dialog.DialogUtils;
 import com.prelimtek.android.customcomponents.R;
 
@@ -28,6 +27,16 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
 
     private static final String TAG = PtekBaseAppCompatActivity.class.getName();
     protected Activity currentActivity;
+
+    private UiModeManager uiModeManager;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+
+    }
 
     @Override
     protected void onStart() {
@@ -51,6 +60,12 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
         super.onResume();
 
         currentActivity = this;
+
+        if(Configuration.configuredPreferences(this).uiDarkMode){
+            uiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
+        }else{
+            uiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
+        }
     }
 
 
@@ -238,6 +253,14 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
                 progressDialog = null;
                 Log.i(TAG, "hideProgress complete progressDialog=" + progressDialog);
             }});
+    }
+
+    public void enableNightMode(){
+        uiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
+    }
+
+    public void disableNightMode(){
+        uiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
     }
 
 
