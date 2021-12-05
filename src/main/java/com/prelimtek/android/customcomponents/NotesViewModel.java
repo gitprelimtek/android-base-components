@@ -44,6 +44,10 @@ public class NotesViewModel extends AndroidViewModel {
         modelId = id;
     }
 
+    public void initializeModel(){
+        modelId = null;
+    }
+
     public void setCurNotes(NotesModel curNotes) {
         this.curNotes = curNotes;
     }
