@@ -19,8 +19,9 @@
     <color name="Red_700">#ffc53929</color>
     <color name="Red_800">#ffb93221</color>
 
-    <color name="background_teal">#f09390</color>
-    <color name="background_amber">#fff09f</color>
-    <color name="background_green">#9cdc9e</color>
+    <color name="background_red">#D34F4B</color>
+    <color name="background_amber">#CBFFD54F</color>
+    <color name="background_green">#C657B35A</color>
     <color name="background_neutral">#ECECEC</color>
+    <color name="blinking_indicator_text_neutral">#ECECEC</color>
 </resources>
