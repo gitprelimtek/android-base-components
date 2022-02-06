@@ -6,6 +6,7 @@ import android.app.UiModeManager;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.prelimtek.android.alerts.DisplayAlertsBroadcastReceiver;
 import com.prelimtek.android.basecomponents.Configuration;
@@ -29,6 +31,7 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
     protected Activity currentActivity;
 
     private UiModeManager uiModeManager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -126,7 +129,7 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
 
     private void showSnackBarMessage(String message){
         Log.i(TAG,"showSnackBarMessage "+message);
-        if(currentActivity.getCurrentFocus()!=null) Snackbar.make(currentActivity.getCurrentFocus(), message, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        if(currentActivity.getCurrentFocus()!=null) Snackbar.make(currentActivity.getCurrentFocus(), message, BaseTransientBottomBar.LENGTH_LONG).setAction("Action", null).show();
         Toast.makeText(PtekBaseAppCompatActivity.this, message, Toast.LENGTH_SHORT).show();
 
     }
@@ -149,44 +152,15 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
 
     }
 
-    private Dialog progressDialog;
-    private ProgressBar bar;
-    private TextView progressTextView;
+    private static Dialog progressDialog;
+    private static ProgressBar bar;
+    private static TextView progressTextView;
     private void showProgress(String message) {
 
         Log.i(TAG, "showProgress " + message);
-        //hideProgress();
-        /*if(Looper.myLooper()==null)Looper.prepare();
-
-         */
-
-        if(Looper.myLooper()==null)Looper.prepare();
-        this.runOnUiThread(new Runnable() {
+        BaseHandlerFactory.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                /*
-                if(progressDialog==null) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(currentActivity);
-                    LayoutInflater inflater = getLayoutInflater();
-                    builder.setView(inflater.inflate(R.layout.process_running_layout_2, null));
-
-                    progressDialog = builder.create();
-
-                    progressDialog.setCanceledOnTouchOutside(false);
-                    progressDialog.show();
-
-                    bar = progressDialog.findViewById(R.id.progress_bar);
-                    bar.setVisibility(View.VISIBLE);
-                    bar.setMax(100);
-                    bar.bringToFront();
-
-                    progressTextView = progressDialog.findViewById(R.id.process_errorMessage);
-                }
-                progressTextView.setText(message);
-                */
-
-
 
                 progressDialog = DialogUtils.startProgressDialog(currentActivity, message);
 
@@ -196,29 +170,8 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
 
     private void updateProgress(String message, int progress){
         Log.i(TAG, "updateProgress " + message);
-        /*if(progressDialog==null || !progressDialog.isShowing() || bar==null){
-            showProgress(message);
-        }
-        progressTextView.setText(message);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            bar.setProgress(progress,true);
-        }else{
-            bar.setProgress(progress);
-        }*/
 
-       /* if(progressDialog==null || !progressDialog.isShowing()){
-            showProgress(message);
-        }else{
-            progressTextView.setText(message);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                bar.setProgress(progress,true);
-            }else {
-                bar.setProgress(progress);
-            }
-        }
-*/
-        if(Looper.myLooper()==null)Looper.prepare();
-        this.runOnUiThread(new Runnable() {
+        BaseHandlerFactory.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (progressDialog == null || !progressDialog.isShowing() || bar == null) {
@@ -239,8 +192,8 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
     }
 
     private void hideProgress(){
-        if(Looper.myLooper()==null)Looper.prepare();
-        this.runOnUiThread(new Runnable() {
+        //if(Looper.myLooper()==null)Looper.prepare();
+        BaseHandlerFactory.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.i(TAG, "hideProgress progressDialog=" + progressDialog);
@@ -264,4 +217,12 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
     }
 
 
+
+}
+
+class BaseHandlerFactory{
+    private static Handler mHandler = new Handler(Looper.getMainLooper());
+    public static void runOnUiThread(Runnable action){
+        mHandler.post(action);
+    }
 }
