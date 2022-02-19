@@ -50,12 +50,21 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        //if (displayAlertsCallback != null) {
+        //    unregisterReceiver(displayAlertsCallback);
+        //}
+
+        //hideProgress();
+        ActionBarUtilities.instance(currentActivity).hideProgress();
+        hideAlertDialog();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (displayAlertsCallback != null) {
             unregisterReceiver(displayAlertsCallback);
         }
-
-        hideProgress();
-        hideAlertDialog();
     }
 
     @Override
@@ -83,23 +92,28 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
                         String type = resultData.getString(DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_TYPE_KEY);
                         switch(type){
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_ERROR_MESSAGE_TYPE:
-                                showError(message==null?null:message.toString());
+                                //showError(message==null?null:message.toString());
+                                ActionBarUtilities.instance(currentActivity).showError(message.toString());
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_NETWORK_ALERT_ERROR_MESSAGE_TYPE:
-                                showNetworkError(message==null?null:message.toString());
+                                //showNetworkError(message==null?null:message.toString());
+                                ActionBarUtilities.instance(currentActivity).showNetworkError(message.toString());
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_NORMAL_MESSAGE_TYPE:
                                 showSnackBarMessage(message==null?null:message.toString());
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_SHOW_PROGRESS_TYPE:
-                                showProgress(message==null?null:message.toString());
+                                //showProgress(message==null?null:message.toString());
+                                ActionBarUtilities.instance(currentActivity).showProgress(message.toString());
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_UPDATE_PROGRESS_TYPE:
                                 int progress = resultData.getInt(DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_PROGRESS_KEY,-1);
-                                updateProgress(message==null?null:message.toString(),progress);
+                                //updateProgress(message==null?null:message.toString(),progress);
+                                ActionBarUtilities.instance(currentActivity).updateProgress(message.toString(),progress);
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_HIDE_PROGRESS_TYPE:
-                                hideProgress();
+                                //hideProgress();
+                                ActionBarUtilities.instance(currentActivity).hideProgress();
                                 break;
                             default:
                                 showError(message==null?null:message.toString());
@@ -222,7 +236,16 @@ public class PtekBaseAppCompatActivity extends AppCompatActivity {
 
 class BaseHandlerFactory{
     private static Handler mHandler = new Handler(Looper.getMainLooper());
+
+    public static void runNowOnUiThread(Runnable action){
+        mHandler.postAtFrontOfQueue(action);
+    }
+
     public static void runOnUiThread(Runnable action){
         mHandler.post(action);
+    }
+
+    public static void runOnUiThread(Runnable action, int delayMilliSec){
+        mHandler.postDelayed(action,delayMilliSec);
     }
 }
