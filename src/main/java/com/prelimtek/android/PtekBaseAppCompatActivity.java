@@ -25,7 +25,7 @@ import com.prelimtek.android.basecomponents.Configuration;
 import com.prelimtek.android.basecomponents.dialog.DialogUtils;
 import com.prelimtek.android.customcomponents.R;
 
-public class PtekBaseAppCompatActivity extends AppCompatActivity {
+public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
 
     private static final String TAG = PtekBaseAppCompatActivity.class.getName();
     protected Activity currentActivity;
