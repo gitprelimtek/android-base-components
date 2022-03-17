@@ -1,5 +1,5 @@
 
-# android-base-components (Release_2.0.0)
+# android-base-components (Release_2.2.0)
 base components for building androidx (jetpack) apps.
 
 1. Custom components
@@ -10,6 +10,9 @@ base components for building androidx (jetpack) apps.
 3. AppMessages
 4. Data Backup components
 5. Utilities
+6. NetworkMonitor
+7. Notification utilities
+8. Alert broadcast receiver
 
 
 ##   1. Custom components
@@ -25,4 +28,9 @@ base components for building androidx (jetpack) apps.
 
 ## 5. Utilities
 
+## 6. NetworkMonitor
+
+## 7. Notification utilities
+
+## 8. Alert broadcast receiver
 
