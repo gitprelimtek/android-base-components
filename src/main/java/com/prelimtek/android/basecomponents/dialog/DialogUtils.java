@@ -142,20 +142,6 @@ public class DialogUtils {
 
         if(Looper.myLooper()==null)Looper.prepare();
 
-        /*
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        dialogBuilder.setView(R.layout.generic_info_dialog_layout);
-        //TODO add icon dialogBuilder.setIcon()
-        dialogBuilder.setTitle(title_id);
-        dialogBuilder.setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-        */
-
-        //Dialog errorDialog = dialogBuilder.create();
-        //errorDialog.getWindow().setType(WindowManager.LayoutParams.LAST_APPLICATION_WINDOW);
         Dialog errorDialog = new Dialog(context,R.style.PtekGenericDialog);
         errorDialog.setTitle(title_id);
         errorDialog.setContentView(R.layout.generic_info_dialog_layout);

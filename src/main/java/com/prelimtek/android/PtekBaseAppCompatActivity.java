@@ -115,6 +115,11 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
                                 //hideProgress();
                                 ActionBarUtilities.instance(currentActivity).hideProgress();
                                 break;
+                            case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_POP_MESSAGE_TYPE:
+                                //hideProgress();
+                                showInfoMessage(message==null?null:message.toString());
+                                break;
+
                             default:
                                 showError(message==null?null:message.toString());
                                 break;
@@ -162,6 +167,15 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
 
         if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
         errorDialog= DialogUtils.startErrorDialog(currentActivity,message);
+        //DialogUtils.startErrorDialogRunnable(currentActivity,message,false);
+
+    }
+
+    private void showInfoMessage(String message){
+        Log.i(TAG,"callbackError "+message);
+
+        if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
+        errorDialog= DialogUtils.startInfoDialog(currentActivity,"Info",message);
         //DialogUtils.startErrorDialogRunnable(currentActivity,message,false);
 
     }

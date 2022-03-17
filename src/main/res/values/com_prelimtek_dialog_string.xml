@@ -19,4 +19,7 @@
 
     <string name="versionLabel">Version:</string>
 
+    <string name="upgrage_to_premium">Upgradge to premium version to enable this feature</string>
+    <string name="upgrage_notification_title">Upgradge to premium</string>
+
 </resources>
