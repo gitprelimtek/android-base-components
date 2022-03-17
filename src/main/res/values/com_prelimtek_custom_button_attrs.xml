@@ -13,7 +13,7 @@
         <attr name="imageWidth" format="string" />
         <attr name="imageLength" format="string" />
         <attr name="text" format="string" />
-
+        <attr name="android:enabled" format="boolean" />
 
     </declare-styleable>
 </resources>

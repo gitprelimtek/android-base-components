@@ -66,15 +66,6 @@ public class CustomImageButton extends LinearLayout {
         //Init components
          imageview = (ImageView)viewlayout.findViewById(R.id.custom_button_image);
 
-         /*this.setOnTouchListener(new OnTouchListener() {
-             @Override
-             public boolean onTouch(View v, MotionEvent event) {
-                     tintImage(v);
-                     return performClick();
-             }
-         });*/
-
-
          textview = (TextView)viewlayout.findViewById(R.id.custom_button_textView);
 
         TypedArray ta = getContext().obtainStyledAttributes(attrs,R.styleable.CustomImageButton,0,0);
@@ -86,7 +77,7 @@ public class CustomImageButton extends LinearLayout {
             setImageSrc(ta.getString(R.styleable.CustomImageButton_imageSrc));
             setImageLength(ta.getString(R.styleable.CustomImageButton_imageLength ));
             setImageWidth(ta.getString(R.styleable.CustomImageButton_imageWidth ));
-            //setActivated(ta.getBoolean(R.style.act));
+            setEnabled(ta.getBoolean(R.styleable.CustomImageButton_android_enabled,true));
         } finally {
             ta.recycle();
         }
@@ -94,7 +85,6 @@ public class CustomImageButton extends LinearLayout {
         //Important! do this because inflated view was not attached to root.
         this.addView(viewlayout);
 
-        reDrawUI(true);
     }
 
     public void reDrawUI(boolean activated){
@@ -104,16 +94,13 @@ public class CustomImageButton extends LinearLayout {
         int bcgrnColor= ResourcesUtils.getColor(this,R.color.io_mtini_custom_button_background_color);
         int textColor = ResourcesUtils.getColor(this,R.color.io_mtini_custom_button_text_color);
 
-        int deac_bcgrnColor = ResourcesUtils.getColor(this,R.color.io_mtini_deactivate_custom_button_background_color);
-        int deac_textColor = ResourcesUtils.getColor(this,R.color.io_mtini_deactivate_custom_button_text_color);
-
-        if(activated) {
-            viewlayout.setBackgroundColor(bcgrnColor);
-            textview.setTextColor(textColor);
-        } else {
-            viewlayout.setBackgroundColor(deac_bcgrnColor);
-            textview.setTextColor(deac_textColor);
+        if(!activated) {
+            bcgrnColor = ResourcesUtils.getColor(this,R.color.io_mtini_deactivate_custom_button_background_color);
+            textColor = ResourcesUtils.getColor(this,R.color.io_mtini_deactivate_custom_button_text_color);
         }
+
+        viewlayout.setBackgroundColor(bcgrnColor);
+        textview.setTextColor(textColor);
 
     }
 
@@ -261,21 +248,32 @@ public class CustomImageButton extends LinearLayout {
     }
 
     public void setText(CharSequence text) {
-        if(text==null || text.toString().isEmpty() || showText==false)return;
-        textview.setText(text);
-        this.text = text;
+        if(text!=null && !text.toString().isEmpty() && showText) {
+            textview.setText(text);
+            this.text = text;
+        }else{
+            textview.setText(null);
+            this.text = null;
+        }
+
         invalidate();
         requestLayout();
     }
 
+    @Override
     public void setActivated(boolean activate){
         super.setActivated(activate);
         reDrawUI(activate);
+        invalidate();
+        requestLayout();
     }
 
+    @Override
     public void setEnabled(boolean enabled){
         super.setEnabled(enabled);
         reDrawUI(enabled);
+        invalidate();
+        requestLayout();
     }
 
     public void setClickable(boolean clickeable){

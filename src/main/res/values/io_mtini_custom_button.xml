@@ -2,6 +2,6 @@
 <resources>
     <color name="io_mtini_custom_button_background_color">#5D9A87</color>
     <color name="io_mtini_custom_button_text_color">#F7FAF9</color>
-    <color name="io_mtini_deactivate_custom_button_text_color">#4FFBFBFB</color>
-    <color name="io_mtini_deactivate_custom_button_background_color">#5C4DB6AC</color>
+    <color name="io_mtini_deactivate_custom_button_text_color">#979595</color>
+    <color name="io_mtini_deactivate_custom_button_background_color">#576E6B</color>
 </resources>
