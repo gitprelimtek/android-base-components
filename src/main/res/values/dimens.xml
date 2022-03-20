@@ -34,4 +34,7 @@
     <dimen name="labelTextSize">8dp</dimen>
     <dimen name="outputTextSize">8dp</dimen>
     -->
+
+    <dimen name="list_layout_padding">20dp</dimen>
+    <dimen name="list_item_margin">5dp</dimen>
 </resources>
