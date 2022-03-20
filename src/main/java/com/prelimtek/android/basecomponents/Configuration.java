@@ -8,15 +8,14 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
 import java.text.SimpleDateFormat;
+import java.util.Currency;
+import java.util.Locale;
 
+import com.google.common.base.Strings;
+import com.prelimtek.android.customcomponents.BuildConfig;
 import com.prelimtek.android.customcomponents.R;
 
 public class Configuration {
-
-
-    static{
-        //TODO read config file
-    }
 
     /** 24 hours */
     public static int expiration_24_hours = 24;
@@ -109,11 +108,13 @@ public class Configuration {
 
         conf.authService = defaultPrefs.getString(authServiceKey,DEFAULT_AUTH_SERVICE);
         conf.currencyCode = defaultPrefs.getString("base_currency","USD");
+        conf.currencyCode = Strings.isNullOrEmpty(conf.currencyCode)?Currency.getInstance(Locale.getDefault()).getCurrencyCode():conf.currencyCode;
+
         conf.dateFormatStr = defaultPrefs.getString("date_format","yyyy/MM/dd");
         conf.dateFormat = new SimpleDateFormat(conf.dateFormatStr);
 
         conf.tlsEnabled= defaultPrefs.getBoolean("remoteServerTLSEnabled",false);
-        conf.remoteHostUrl = defaultPrefs.getString("remoteServer",null);
+        conf.remoteHostUrl = defaultPrefs.getString("remoteServer", null);
         conf.remoteMqttUrl = defaultPrefs.getString("queueBroker",null);
 
         conf.networkRequired = defaultPrefs.getBoolean("networkRequired",Boolean.FALSE);
@@ -151,9 +152,11 @@ public class Configuration {
         } catch (PackageManager.NameNotFoundException ex) {}
         return "";
     }
-
+    @Deprecated //Use BuildConfig
     public String remoteHostUrl;
+    @Deprecated //Use BuildConfig
     public String remoteMqttUrl;
+
     public String customerId;
     public String apikey;
     public String userEmail;
