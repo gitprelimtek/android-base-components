@@ -25,6 +25,7 @@ public class DisplayAlertsBroadcastReceiver extends BroadcastReceiver {
     public static final String DISPLAY_ALERT_HIDE_PROGRESS_TYPE = "DisplayAlertsBroadcastReceiver_HIDE_PROGRESS__TYPE";
     public static final String DISPLAY_ALERT_UPDATE_PROGRESS_TYPE = "DisplayAlertsBroadcastReceiver_UPDATE_PROGRESS__TYPE";
     public static final String DISPLAY_ALERT_POP_MESSAGE_TYPE = "DisplayAlertsBroadcastReceiver_DISPLAY_ALERT_POP_MESSAGE_TYPE";
+    public static final String SEND_NOTIFICATION_TYPE = "DisplayAlertsBroadcastReceiver_SEND_NOTIFICATION_TYPE";
 
     //just added this because Manifest was complaining
     public DisplayAlertsBroadcastReceiver(){}
@@ -102,12 +103,19 @@ public class DisplayAlertsBroadcastReceiver extends BroadcastReceiver {
         context.sendBroadcast(intent);
     }
 
+    public static void sendNotification(Context context,String message){
+        Intent intent = new Intent(DISPLAY_ALERT_ACTION);
+        intent.putExtra(DISPLAY_ALERT_MESSAGE_KEY,message);
+        intent.putExtra(DISPLAY_ALERT_TYPE_KEY, SEND_NOTIFICATION_TYPE);
+        context.sendBroadcast(intent);
+    }
+
     public static void sendNotification(Context context,int notificationId, String title, String message){
-        //NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context.getApplicationContext())
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,"BaseNotification")
                         .setContentTitle(title)
                         .setContentText(message)
-                        .setSmallIcon(R.drawable.notification);
+                        .setSmallIcon(R.drawable.notification)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         // Get an instance of the NotificationManager service
         NotificationManagerCompat notificationManager =

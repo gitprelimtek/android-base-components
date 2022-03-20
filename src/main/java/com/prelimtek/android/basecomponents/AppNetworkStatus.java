@@ -15,6 +15,7 @@ public class AppNetworkStatus {
     private static AppNetworkStatus instance = new AppNetworkStatus();
     private AppNetworkStatus(){}
 
+
     public static AppNetworkStatus getInstance(Context _context){
             context = _context.getApplicationContext();
             return instance;
@@ -37,7 +38,7 @@ public class AppNetworkStatus {
     public void networkIsRequired(boolean required){
         if(required && !isOnline()){
             //redirectToNoNetworkPage();
-            DisplayAlertsBroadcastReceiver.sendNetworkErrorMessage(context,"Network connectivity is bad. Enable your network and try again.");
+            DisplayAlertsBroadcastReceiver.sendNetworkErrorMessage(context,"Network connectivity is slow or disabled. Check and reload.");
         }
     }
 

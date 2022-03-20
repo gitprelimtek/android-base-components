@@ -119,6 +119,11 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
                                 //hideProgress();
                                 showInfoMessage(message==null?null:message.toString());
                                 break;
+                            case DisplayAlertsBroadcastReceiver.SEND_NOTIFICATION_TYPE:
+                                //hideProgress();
+                                if(message!=null)
+                                    showNotification(message.toString());
+                                break;
 
                             default:
                                 showError(message==null?null:message.toString());
