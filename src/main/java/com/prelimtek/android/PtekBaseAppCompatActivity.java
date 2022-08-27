@@ -2,9 +2,13 @@ package com.prelimtek.android;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.app.UiModeManager;
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -39,6 +44,7 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
 
         uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
 
+        currentActivity = this;
     }
 
     @Override
@@ -71,13 +77,13 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        currentActivity = this;
-
         if(Configuration.configuredPreferences(this).uiDarkMode){
             uiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
         }else{
             uiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
         }
+
+        currentActivity = this;
     }
 
 
@@ -90,30 +96,31 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
                     public void onReceiveResult(int resultCode, Bundle resultData) {
                         CharSequence message = resultData.getCharSequence(DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_MESSAGE_KEY);
                         String type = resultData.getString(DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_TYPE_KEY);
+                        Activity activity = getCurrentOpActivity();
                         switch(type){
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_ERROR_MESSAGE_TYPE:
                                 //showError(message==null?null:message.toString());
-                                ActionBarUtilities.instance(currentActivity).showError(message.toString());
+                                ActionBarUtilities.instance(activity).showError(message.toString());
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_NETWORK_ALERT_ERROR_MESSAGE_TYPE:
                                 //showNetworkError(message==null?null:message.toString());
-                                ActionBarUtilities.instance(currentActivity).showNetworkError(message.toString());
+                                ActionBarUtilities.instance(activity).showNetworkError(message.toString());
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_NORMAL_MESSAGE_TYPE:
                                 showSnackBarMessage(message==null?null:message.toString());
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_SHOW_PROGRESS_TYPE:
                                 //showProgress(message==null?null:message.toString());
-                                ActionBarUtilities.instance(currentActivity).showProgress(message.toString());
+                                ActionBarUtilities.instance(activity).showProgress(message.toString());
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_UPDATE_PROGRESS_TYPE:
                                 int progress = resultData.getInt(DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_PROGRESS_KEY,-1);
                                 //updateProgress(message==null?null:message.toString(),progress);
-                                ActionBarUtilities.instance(currentActivity).updateProgress(message.toString(),progress);
+                                ActionBarUtilities.instance(activity).updateProgress(message.toString(),progress);
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_HIDE_PROGRESS_TYPE:
                                 //hideProgress();
-                                ActionBarUtilities.instance(currentActivity).hideProgress();
+                                ActionBarUtilities.instance(activity).hideProgress();
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_POP_MESSAGE_TYPE:
                                 //hideProgress();
@@ -141,19 +148,21 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
     }
 
 
-    private void showNotification(String message){
+    protected void showNotification(String message){
         Log.i(TAG,"showNotification "+message);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"BaseNotification")
                 .setSmallIcon(R.drawable.notification)
                 .setContentTitle("Notice")
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
         NotificationManagerCompat.from(this).notify(9876,builder.build());
     }
 
     private void showSnackBarMessage(String message){
         Log.i(TAG,"showSnackBarMessage "+message);
-        if(currentActivity.getCurrentFocus()!=null) Snackbar.make(currentActivity.getCurrentFocus(), message, BaseTransientBottomBar.LENGTH_LONG).setAction("Action", null).show();
+        Activity activity = getCurrentOpActivity();
+        if(activity.getCurrentFocus()!=null) Snackbar.make(activity.getCurrentFocus(), message, BaseTransientBottomBar.LENGTH_LONG).setAction("Action", null).show();
         Toast.makeText(PtekBaseAppCompatActivity.this, message, Toast.LENGTH_SHORT).show();
 
     }
@@ -161,27 +170,27 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
     private Dialog errorDialog;
     private void showNetworkError(String message){
         Log.i(TAG,"callbackError "+message);
-
+        Activity activity = getCurrentOpActivity();
         if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
-        errorDialog= DialogUtils.startErrorDialog(currentActivity,message);
+        errorDialog= DialogUtils.startErrorDialog(activity,message);
         //DialogUtils.startErrorDialogRunnable(currentActivity,message,false);
 
     }
     private void showError(String message){
         Log.i(TAG,"callbackError "+message);
-
+        Activity activity = getCurrentOpActivity();
         if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
-        errorDialog= DialogUtils.startErrorDialog(currentActivity,message);
+        errorDialog= DialogUtils.startErrorDialog(activity,message);
         //DialogUtils.startErrorDialogRunnable(currentActivity,message,false);
 
     }
 
     private void showInfoMessage(String message){
         Log.i(TAG,"callbackError "+message);
-
+        Activity activity = getCurrentOpActivity();
+        if(activity==null)return;
         if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
-        errorDialog= DialogUtils.startInfoDialog(currentActivity,"Info",message);
-        //DialogUtils.startErrorDialogRunnable(currentActivity,message,false);
+        errorDialog= DialogUtils.startInfoDialog(activity,"Info",message);
 
     }
 
@@ -195,7 +204,7 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                progressDialog = DialogUtils.startProgressDialog(currentActivity, message);
+                progressDialog = DialogUtils.startProgressDialog(getCurrentOpActivity(), message);
 
             }
         });
@@ -250,6 +259,11 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
     }
 
 
+    private Activity getCurrentOpActivity(){
+        return currentActivity.getParent()!=null && !currentActivity.getParent().isFinishing()
+                ?currentActivity.getParent()
+                :currentActivity;
+    }
 
 }
 
