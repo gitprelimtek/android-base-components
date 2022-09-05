@@ -6,13 +6,20 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.app.UiModeManager;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,22 +62,25 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+
+        ActionBarUtilities.instance(currentActivity).hideProgress();
+        hideAlertDialog();
+
         super.onStop();
         //if (displayAlertsCallback != null) {
         //    unregisterReceiver(displayAlertsCallback);
         //}
 
         //hideProgress();
-        ActionBarUtilities.instance(currentActivity).hideProgress();
-        hideAlertDialog();
+
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (displayAlertsCallback != null) {
             unregisterReceiver(displayAlertsCallback);
         }
+        super.onDestroy();
     }
 
     @Override
@@ -96,7 +106,7 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
                     public void onReceiveResult(int resultCode, Bundle resultData) {
                         CharSequence message = resultData.getCharSequence(DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_MESSAGE_KEY);
                         String type = resultData.getString(DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_TYPE_KEY);
-                        Activity activity = getCurrentOpActivity();
+                        Activity activity = PtekBaseAppCompatActivity.this;//getCurrentOpActivity();
                         switch(type){
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_ERROR_MESSAGE_TYPE:
                                 //showError(message==null?null:message.toString());
@@ -124,7 +134,8 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
                                 break;
                             case DisplayAlertsBroadcastReceiver.DISPLAY_ALERT_POP_MESSAGE_TYPE:
                                 //hideProgress();
-                                showInfoMessage(message==null?null:message.toString());
+                                //showInfoMessage(message==null?null:message.toString());
+                                showPopupMessage("Caution!",String.valueOf(message));
                                 break;
                             case DisplayAlertsBroadcastReceiver.SEND_NOTIFICATION_TYPE:
                                 //hideProgress();
@@ -147,7 +158,6 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
         return displayAlertsCallback;
     }
 
-
     protected void showNotification(String message){
         Log.i(TAG,"showNotification "+message);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"BaseNotification")
@@ -155,43 +165,76 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
                 .setContentTitle("Notice")
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
         NotificationManagerCompat.from(this).notify(9876,builder.build());
     }
 
     private void showSnackBarMessage(String message){
         Log.i(TAG,"showSnackBarMessage "+message);
         Activity activity = getCurrentOpActivity();
-        if(activity.getCurrentFocus()!=null) Snackbar.make(activity.getCurrentFocus(), message, BaseTransientBottomBar.LENGTH_LONG).setAction("Action", null).show();
+        if(activity.getCurrentFocus()!=null) {
+            Snackbar.make(activity.getCurrentFocus(), message, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
         Toast.makeText(PtekBaseAppCompatActivity.this, message, Toast.LENGTH_SHORT).show();
-
     }
 
     private Dialog errorDialog;
     private void showNetworkError(String message){
         Log.i(TAG,"callbackError "+message);
         Activity activity = getCurrentOpActivity();
-        if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
-        errorDialog= DialogUtils.startErrorDialog(activity,message);
-        //DialogUtils.startErrorDialogRunnable(currentActivity,message,false);
+        //if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
+        new Handler().postDelayed(()->{
+            errorDialog= DialogUtils.startErrorDialog(activity,message);
+        },1000);
 
     }
     private void showError(String message){
         Log.i(TAG,"callbackError "+message);
         Activity activity = getCurrentOpActivity();
-        if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
-        errorDialog= DialogUtils.startErrorDialog(activity,message);
-        //DialogUtils.startErrorDialogRunnable(currentActivity,message,false);
+        if(activity==null || activity.isFinishing())return;
+        //if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
+        new Handler().postDelayed(()->{
+            errorDialog= DialogUtils.startErrorDialog(activity,message);
+        },1000);
 
     }
 
     private void showInfoMessage(String message){
         Log.i(TAG,"callbackError "+message);
         Activity activity = getCurrentOpActivity();
-        if(activity==null)return;
-        if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
-        errorDialog= DialogUtils.startInfoDialog(activity,"Info",message);
+        if(activity==null || activity.isFinishing())return;
+        //if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}
+        new Handler().postDelayed(()->{
+            errorDialog= DialogUtils.startInfoDialog(activity,"Info",message);
+        },1000);
 
+    }
+
+    private void showPopupMessage(String title, String message){
+        Log.i(TAG,"callbackError "+message);
+        Activity activity = getCurrentOpActivity();
+        if(activity==null || activity.isFinishing())return;
+        //if(errorDialog!=null && errorDialog.isShowing()){errorDialog.dismiss();}//due to IllegalArgument - not attached to window manager
+        errorDialog= DialogUtils.startInfoDialog(activity,title,message);
+    }
+
+    private void showSystemPopupWindow(String message){
+        WindowManager windowManager2 = (WindowManager)getSystemService(WINDOW_SERVICE);
+        LayoutInflater layoutInflater=(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view=layoutInflater.inflate(R.layout.popup_message_layout, null);
+        TextView text = view.findViewById(R.id.popup_message_text);
+        //ImageView image = view.findViewById(R.id.popup_message_image);
+        text.setText(message);
+        WindowManager.LayoutParams params=new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+        );
+        params.gravity= Gravity.CENTER|Gravity.CENTER;
+        params.x=0;
+        params.y=0;
+        windowManager2.addView(view, params);
     }
 
     private static Dialog progressDialog;
@@ -263,6 +306,7 @@ public abstract class PtekBaseAppCompatActivity extends AppCompatActivity {
         return currentActivity.getParent()!=null && !currentActivity.getParent().isFinishing()
                 ?currentActivity.getParent()
                 :currentActivity;
+
     }
 
 }

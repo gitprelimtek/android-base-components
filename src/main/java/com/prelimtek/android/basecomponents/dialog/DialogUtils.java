@@ -1,14 +1,19 @@
 package com.prelimtek.android.basecomponents.dialog;
 
+import static android.content.Context.WINDOW_SERVICE;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Looper;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -139,7 +144,6 @@ public class DialogUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static Dialog createGenericInfoDialog(Context context, int title_id, int icon_id, String message, String errorMessage, boolean autocancel){
-
         if(Looper.myLooper()==null)Looper.prepare();
 
         Dialog errorDialog = new Dialog(context,R.style.PtekGenericDialog);
@@ -160,7 +164,6 @@ public class DialogUtils {
         TextView msgTxtView = errorDialog.findViewById(R.id.generic_message);
         if(msgTxtView!=null)msgTxtView.setText(message);
 
-
         return errorDialog;
     }
 
@@ -171,7 +174,6 @@ public class DialogUtils {
     }
 
     public static AlertDialog createErrorDialog_1(Context context, String message,boolean autocancel){
-
         if(Looper.myLooper()==null)Looper.prepare();
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
@@ -207,11 +209,31 @@ public class DialogUtils {
             }
         });
 
-
         AlertDialog errorDialog = dialogBuilder.create();
         errorDialog.setCanceledOnTouchOutside(true);
         errorDialog.show();
         return errorDialog;
+    }
+    /**<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/> in manifest*/
+    public static void showSystemPopupWindow(Context context, String message){
+        WindowManager windowManager2 = (WindowManager)context.getSystemService(WINDOW_SERVICE);
+        LayoutInflater layoutInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view=layoutInflater.inflate(R.layout.popup_message_layout, null);
+        TextView text = view.findViewById(R.id.popup_message_text);
+        //ImageView image = view.findViewById(R.id.popup_message_image);
+        text.setText(message);
+        WindowManager.LayoutParams params=new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+        );
+
+        params.gravity= Gravity.CENTER|Gravity.CENTER;
+        params.x=0;
+        params.y=0;
+        windowManager2.addView(view, params);
     }
 
     public static AlertDialog startInfoDialog(Context context, CharSequence title, String message, DialogInterface.OnClickListener positiveListener){
@@ -225,7 +247,6 @@ public class DialogUtils {
 
 
     public static AlertDialog startInfoDialog(Context context, CharSequence title, String message, DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener){
-        if(Looper.myLooper()==null)Looper.prepare();
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         //TODO add icon dialogBuilder.setIcon()

@@ -20,6 +20,9 @@
     <string name="versionLabel">Version:</string>
 
     <string name="upgrage_to_premium">Upgradge to premium version to enable this feature</string>
-    <string name="upgrage_notification_title">Upgradge to premium</string>
+    <string name="upgrage_notification_title">Upgradge subscription!</string>
+
+    <string name="upgrage_to_higher">This feature is disabled because you have exceeded your data quota. Upgrade your subscription to enable this feature.</string>
+
 
 </resources>
