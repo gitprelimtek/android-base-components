@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Currency;
@@ -16,7 +17,7 @@ import com.prelimtek.android.customcomponents.BuildConfig;
 import com.prelimtek.android.customcomponents.R;
 
 public class Configuration {
-
+    private static final String TAG = Configuration.class.getSimpleName();
     /** 24 hours */
     public static int expiration_24_hours = 24;
 
@@ -80,23 +81,24 @@ public class Configuration {
         this.context = context;
         versionCode = getVersionCode(context);
         versionName = getVersionName(context);
-        PreferenceManager.setDefaultValues(context.getApplicationContext(),R.xml.preferences,false);
+        PreferenceManager.setDefaultValues(getApplicationContext(context),R.xml.preferences,false);
     }
 
     public SharedPreferences.Editor edit() {
-        SharedPreferences pref = context.getApplicationContext().getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext(context).getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         return editor;
     }
 
-    public static SharedPreferences preferences(Context context) {
-        SharedPreferences pref = context.getApplicationContext().getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    public static SharedPreferences preferences(Context  context) {
+
+        SharedPreferences pref = getApplicationContext(context).getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
         return pref;
     }
 
     public static Configuration configuredPreferences(Context context){
         Configuration conf = new Configuration(context);
-        SharedPreferences pref = context.getApplicationContext().getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext(context).getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
 
         //server-side gets
         conf.apikey  = pref.getString(Configuration.preferences_jwt_key, null);
@@ -151,6 +153,17 @@ public class Configuration {
             return  ""+pi.versionName+":"+pi.versionCode;
         } catch (PackageManager.NameNotFoundException ex) {}
         return "";
+    }
+
+    public static Context getApplicationContext(Context context){
+        if(context!=null && context.getApplicationContext()!=null){
+            return context.getApplicationContext();
+        }else if(context!=null){
+            return context;
+        }else{
+            Log.e(TAG,"returning null!!! Will cause error.");
+            return null;
+        }
     }
     @Deprecated //Use BuildConfig
     public String remoteHostUrl;

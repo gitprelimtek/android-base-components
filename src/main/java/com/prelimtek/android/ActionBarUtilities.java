@@ -97,34 +97,49 @@ public class ActionBarUtilities {
     public void showError(String message){
         Log.d(TAG,"showError : "+message);
         if(errorText==null)return;
-        BaseHandlerFactory.runOnUiThread(new Runnable() {
+        /*BaseHandlerFactory.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if(errorText==null)return;
                 errorText.setVisibility(View.VISIBLE);
                 errorText.setText(message);
             }
-        });
+        });*/
+
+        errorText.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                errorText.setVisibility(View.VISIBLE);
+                errorText.setText(message);
+            }
+        },300);
     }
 
     public void showNetworkError(String message){
         Log.d(TAG,"showNetworkError : "+message);
         if(errorText==null)return;
-        BaseHandlerFactory.runOnUiThread(new Runnable() {
+        /*BaseHandlerFactory.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if(errorText==null)return;
                 errorText.setVisibility(View.VISIBLE);
                 errorText.setText(message);
             }
-        });
+        });*/
+        errorText.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                errorText.setVisibility(View.VISIBLE);
+                errorText.setText(message);
+            }
+        },300);
     }
 
 
     public void showInfo(String message){
         Log.d(TAG,"showInfo : "+message);
         if(infoText==null)return;
-        BaseHandlerFactory.runOnUiThread(new Runnable() {
+        /*BaseHandlerFactory.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if(infoText==null)return;
@@ -132,7 +147,16 @@ public class ActionBarUtilities {
                 infoText.setText(message);
                 hideDelayed(infoText);
             }
-        });
+        });*/
+
+        infoText.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                infoText.setVisibility(View.VISIBLE);
+                infoText.setText(message);
+                hideDelayed(infoText);
+            }
+        },300);
     }
 
     public void hideDelayed(View view){
