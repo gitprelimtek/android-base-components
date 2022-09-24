@@ -1,18 +1,24 @@
 package com.prelimtek.android.customcomponents;
 
+
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
+import androidx.annotation.Nullable;
+
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -20,13 +26,12 @@ import java.util.List;
 
 
 /**
- *
  * This class can be called from a dialog or activity.
+ * This is a new implementation of NotesListDisplayFragment, with VMMV architecture.
  *
  * @author kaniundungu
- * **/
-@Deprecated
-public class NotesListDisplayFragment extends Fragment {
+ **/
+public class NotesListDisplayFragmentV2 extends Fragment {
 
     public static String TAG = Class.class.getSimpleName();
 
@@ -51,20 +56,18 @@ public class NotesListDisplayFragment extends Fragment {
         public void onNoteClicked(NotesModel note);
     }
 
+    private NotesViewModel notesViewModel;
+
+    private NotesViewModel getViewModel() {
+        if (notesViewModel == null)
+            notesViewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), new ViewModelProvider.AndroidViewModelFactory(this.getActivity().getApplication())).get(NotesViewModel.class);
+        return notesViewModel;
+    }
 
     public int viewedItems = 0;
 
-    @NonNull
-    private TextDAOInterface dbHelper;
-
     @Nullable
     private OnNoteSelectedListener noteSelectedLister;
-
-
-    public void setDBHelper(TextDAOInterface localDao) {
-        dbHelper = localDao;
-    }
-
 
     public void setNoteSelectedListener(OnNoteSelectedListener selectedNoteListener) {
         this.noteSelectedLister = selectedNoteListener;
@@ -90,9 +93,9 @@ public class NotesListDisplayFragment extends Fragment {
         //get data object passed by previous activity
         final String modelId = getArguments().getString(MODEL_ID_KEY);
 
-        final Date afterDate = null;//decrementDate(new Date(), 10);
+        final Date afterDate = decrementDate(new Date(), 60);
 
-        List<NotesModel> notesList = modelId == null || dbHelper==null ? null : dbHelper.getNotes(modelId, null, afterDate==null?null:afterDate.getTime(), NotesTextRecyclerViewAdapter.PAGE_BUFFER_SIZE, 0);
+        List<NotesModel> notesList = getViewModel().getAllLocalNotes(null, afterDate == null ? null : afterDate.getTime(), NotesTextRecyclerViewAdapter.PAGE_BUFFER_SIZE, 0);
         viewedItems = notesList == null ? 0 : notesList.size();
 
         //Now bind the list of Images using an adapter
@@ -111,7 +114,9 @@ public class NotesListDisplayFragment extends Fragment {
                         Snackbar.make(v, "Selected note for Details is still under construction.", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                         NotesModel note = (NotesModel) v.getTag();
-                        if (noteSelectedLister != null) noteSelectedLister.onNoteClicked(note);
+                        if (noteSelectedLister != null) {
+                            noteSelectedLister.onNoteClicked(note);
+                        }
 
                     }
                 }
@@ -152,7 +157,7 @@ public class NotesListDisplayFragment extends Fragment {
 
                 try {
 
-                    List<NotesModel> notesList = dbHelper.getNotes(modelId, null, afterDate==null?null:afterDate.getTime(), rowcount, offset);
+                    List<NotesModel> notesList = getViewModel().getAllLocalNotes(null, afterDate == null ? null : afterDate.getTime(), rowcount, offset);
 
                     if (notesList == null || notesList.isEmpty()) return;
 

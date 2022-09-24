@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.AppBarLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/eat_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Widget.AppCompat.PopupMenu" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <com.prelimtek.android.appmessage.CustomNotificationIndicatorButton
+                    android:id="@+id/ptek_actionbar_notification_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:noticeText=""
+                    app:hideIfEmpty="true"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/ptek_actionbar_text_linearlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/ptek_actionbar_error_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textDirection="rtl"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/background_red"
+                        android:alpha=".8"
+                        android:visibility="gone"
+                        android:text=""/>
+
+                    <TextView
+                        android:id="@+id/ptek_actionbar_warning_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textDirection="rtl"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/background_amber"
+                        android:textColorHighlight="@color/background_red"
+                        android:shadowColor="@color/colorPrimaryDark"
+                        android:visibility="gone"
+                        android:alpha=".6"
+                        android:text=""/>
+
+                    <TextView
+                        android:id="@+id/ptek_actionbar_info_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textDirection="rtl"
+                        android:textStyle="italic"
+                        android:visibility="gone"
+                        android:alpha=".4"
+                        android:text=""/>
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/ptek_actionbar_progress_bar"
+                    android:theme="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center"
+                    app:layout_constraintTop_toBottomOf="@id/ptek_actionbar_text_linearlayout"
+                    android:textDirection="rtl"
+                    android:visibility="gone"
+                    android:elevation="11dp"
+                    android:alpha="1.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+</com.google.android.material.appbar.AppBarLayout>

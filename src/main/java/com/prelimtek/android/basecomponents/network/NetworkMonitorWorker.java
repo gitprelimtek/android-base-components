@@ -8,6 +8,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.prelimtek.android.basecomponents.AppNetworkStatus;
+import com.prelimtek.android.basecomponents.Configuration;
 
 /**
  * Purpose of this class is to monitor network availability and type.
@@ -34,13 +35,13 @@ public class NetworkMonitorWorker extends Worker {
         Log.i(TAG,": doWork triggered ###########");
 
         //get conf is network required?
-        boolean networkRequired = false;//Configuration.;
+        boolean networkRequired = Configuration.networkRequired;
         if(networkRequired && !networkStatus.isOnline()){
 
             networkStatus.networkIsRequired(networkRequired);
 
            return Result.failure();
-       }
+        }
 
        return Result.success();
     }

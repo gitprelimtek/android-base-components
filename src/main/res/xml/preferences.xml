@@ -24,27 +24,6 @@
             android:editable="false"
             android:title="Service Email"/>
 
-        <EditTextPreference
-            android:key="remoteServer"
-            android:summary="Remote server"
-            android:requiresFadingEdge="horizontal"
-            android:title="Remote server"
-            android:editable="true"
-            android:defaultValue="@string/eat_app_server"/>
-
-        <EditTextPreference
-            android:key="remoteServerPort"
-            android:summary="Remote server port"
-            android:requiresFadingEdge="horizontal"
-            android:title="Remote server Port"
-            android:editable="true"
-            android:defaultValue="@string/eat_app_server_port"/>
-
-        <SwitchPreference
-            android:key="remoteServerTLSEnabled"
-            android:defaultValue="false"
-            android:title="TLS Enabled?"/>
-
     </PreferenceCategory>
 
     <PreferenceCategory

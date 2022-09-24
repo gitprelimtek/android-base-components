@@ -3,13 +3,18 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:padding="3dp"
     android:id="@+id/custom_button_image_relativelayout_id">
 
     <ImageView
         android:id="@+id/custom_button_image"
-        android:layout_width="20dp"
-        android:layout_height="15dp"
-        android:layout_margin="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="20dp"
+        android:maxHeight="15dp"
+        android:minWidth="20dp"
+        android:minHeight="15dp"
+        android:layout_margin="4dp"
         android:src="@drawable/money" />
 
     <TextView
@@ -20,6 +25,6 @@
         android:textSize="14dp"
         android:textStyle="bold"
         android:text=""
-        android:layout_margin="2dp" />
+        android:layout_margin="4dp" />
 
 </RelativeLayout>

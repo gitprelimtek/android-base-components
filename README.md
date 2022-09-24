@@ -10,6 +10,9 @@ base components for building androidx (jetpack) apps.
 3. AppMessages
 4. Data Backup components
 5. Utilities
+6. NetworkMonitor
+7. Notification utilities
+8. Alert broadcast receiver
 
 
 ##   1. Custom components
@@ -25,4 +28,9 @@ base components for building androidx (jetpack) apps.
 
 ## 5. Utilities
 
+## 6. NetworkMonitor
+
+## 7. Notification utilities
+
+## 8. Alert broadcast receiver
 

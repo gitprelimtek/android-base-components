@@ -6,19 +6,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Currency;
+import java.util.Locale;
 
+import com.google.common.base.Strings;
+import com.prelimtek.android.customcomponents.BuildConfig;
 import com.prelimtek.android.customcomponents.R;
 
 public class Configuration {
-
-
-    static{
-        //TODO read config file
-
-    }
-
+    private static final String TAG = Configuration.class.getSimpleName();
     /** 24 hours */
     public static int expiration_24_hours = 24;
 
@@ -63,6 +62,12 @@ public class Configuration {
 
     public static int imageDialogMaxWidth = 1000;
 
+    public static boolean tlsEnabled=false;
+
+    public static boolean networkRequired=false;
+
+    public static boolean uiDarkMode=false;
+
     public enum SUPPORTED_AUTH_SERVICE{
         none,facebook,mtini,firebase
     }
@@ -76,25 +81,24 @@ public class Configuration {
         this.context = context;
         versionCode = getVersionCode(context);
         versionName = getVersionName(context);
-        PreferenceManager.setDefaultValues(context.getApplicationContext(),R.xml.preferences,false);
+        PreferenceManager.setDefaultValues(getApplicationContext(context),R.xml.preferences,false);
     }
 
     public SharedPreferences.Editor edit() {
-
-        SharedPreferences pref = context.getApplicationContext().getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext(context).getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         return editor;
-        //return this;
     }
 
-    public static SharedPreferences preferences(Context context) {
-        SharedPreferences pref = context.getApplicationContext().getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
+    public static SharedPreferences preferences(Context  context) {
+
+        SharedPreferences pref = getApplicationContext(context).getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
         return pref;
     }
 
     public static Configuration configuredPreferences(Context context){
         Configuration conf = new Configuration(context);
-        SharedPreferences pref = context.getApplicationContext().getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
+        SharedPreferences pref = getApplicationContext(context).getSharedPreferences(Configuration.SERVER_SIDE_PREFERENCES_TAG, Context.MODE_PRIVATE);
 
         //server-side gets
         conf.apikey  = pref.getString(Configuration.preferences_jwt_key, null);
@@ -106,20 +110,18 @@ public class Configuration {
 
         conf.authService = defaultPrefs.getString(authServiceKey,DEFAULT_AUTH_SERVICE);
         conf.currencyCode = defaultPrefs.getString("base_currency","USD");
+        conf.currencyCode = Strings.isNullOrEmpty(conf.currencyCode)?Currency.getInstance(Locale.getDefault()).getCurrencyCode():conf.currencyCode;
+
         conf.dateFormatStr = defaultPrefs.getString("date_format","yyyy/MM/dd");
         conf.dateFormat = new SimpleDateFormat(conf.dateFormatStr);
-        //conf.userEmail = pref.getString("", null);
-        //conf.phoneNumber = pref.getString("", null);
 
-        Boolean sslEnabled = defaultPrefs.getBoolean("remoteServerTLSEnabled",false);
-        String remoteServerPort = defaultPrefs.getString("remoteServerPort",null);
-        String remoteServer = defaultPrefs.getString("remoteServer",null);
+        conf.tlsEnabled= defaultPrefs.getBoolean("remoteServerTLSEnabled",false);
+        conf.remoteHostUrl = defaultPrefs.getString("remoteServer", null);
+        conf.remoteMqttUrl = defaultPrefs.getString("queueBroker",null);
 
-        if(sslEnabled){
-            conf.remoteHostUrl="https://"+remoteServer+":"+remoteServerPort+"/";
-        }else{
-            conf.remoteHostUrl="http://"+remoteServer+":"+remoteServerPort+"/";
-        }
+        conf.networkRequired = defaultPrefs.getBoolean("networkRequired",Boolean.FALSE);
+        conf.uiDarkMode = defaultPrefs.getBoolean("uiDarkMode",Boolean.FALSE);
+
         return conf;
     }
 
@@ -153,7 +155,21 @@ public class Configuration {
         return "";
     }
 
+    public static Context getApplicationContext(Context context){
+        if(context!=null && context.getApplicationContext()!=null){
+            return context.getApplicationContext();
+        }else if(context!=null){
+            return context;
+        }else{
+            Log.e(TAG,"returning null!!! Will cause error.");
+            return null;
+        }
+    }
+    @Deprecated //Use BuildConfig
     public String remoteHostUrl;
+    @Deprecated //Use BuildConfig
+    public String remoteMqttUrl;
+
     public String customerId;
     public String apikey;
     public String userEmail;
@@ -162,7 +178,6 @@ public class Configuration {
     public String dateFormatStr;
     public SimpleDateFormat dateFormat;
     public String authService;
-    public String walletJson;
     public String versionName;
     public int versionCode;
 

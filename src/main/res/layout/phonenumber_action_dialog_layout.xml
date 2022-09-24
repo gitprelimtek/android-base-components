@@ -10,7 +10,7 @@
         android:id="@+id/whatsapp_icon_btn"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_margin="5dp"
+        android:layout_margin="15dp"
         android:tooltipText="@string/whatsapp_btn_tooltip_text"
         android:src="@drawable/whatsapp_icon"/>
 
@@ -19,7 +19,7 @@
         android:id="@+id/text_msg_btn"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_margin="5dp"
+        android:layout_margin="15dp"
         android:tooltipText="@string/textmsg_btn_tooltip_text"
         android:src="@drawable/text_msg"/>
 
@@ -28,7 +28,7 @@
         android:id="@+id/make_phonecall_btn"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_margin="5dp"
+        android:layout_margin="15dp"
         android:tooltipText="@string/phonecall_btn_tooltip_text"
         android:src="@drawable/make_phonecall"
         android:clickable="true"

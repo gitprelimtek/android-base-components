@@ -8,6 +8,7 @@
     </string-array>
 
     <string-array name="currency_codes">
+        <item></item>
         <item>USD</item>
         <item>EUR</item>
         <item>JPY</item>
@@ -19,6 +20,7 @@
     </string-array>
 
     <string-array name="currency_names">
+        <item>Select a currency</item>
         <item>United States Dollar (USD)</item>
         <item>Euro (EUR)</item>
         <item>Japanese Yen (JPY)</item>

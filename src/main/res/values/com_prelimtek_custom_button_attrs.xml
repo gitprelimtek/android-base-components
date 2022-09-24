@@ -3,16 +3,17 @@
     <declare-styleable name="CustomImageButton">
         <attr name="showText" format="boolean" />
         <attr name="textPosition" format="enum">
-            <enum name="text_top" value="0"/>
-            <enum name="text_left" value="1"/>
-            <enum name="text_right" value="2"/>
-            <enum name="text_bottom" value="3"/>
+            <enum name="none" value="0"/>
+            <enum name="text_top" value="1"/>
+            <enum name="text_left" value="2"/>
+            <enum name="text_right" value="3"/>
+            <enum name="text_bottom" value="4"/>
         </attr>
         <attr name="imageSrc" format="string" />
         <attr name="imageWidth" format="string" />
         <attr name="imageLength" format="string" />
         <attr name="text" format="string" />
-
+        <attr name="android:enabled" format="boolean" />
 
     </declare-styleable>
 </resources>

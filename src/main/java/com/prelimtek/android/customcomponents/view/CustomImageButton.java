@@ -17,12 +17,13 @@ import android.widget.TextView;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Strings;
 import com.prelimtek.android.basecomponents.ResourcesUtils;
 import com.prelimtek.android.customcomponents.R;
 
 public class CustomImageButton extends LinearLayout {
 
-    public enum Direction {text_top, text_left, text_right, text_bottom}
+    public enum Direction {none, text_top, text_left, text_right, text_bottom}
     protected Direction direction;
     protected AttributeSet attrs = null;
     protected RelativeLayout viewlayout;
@@ -65,27 +66,18 @@ public class CustomImageButton extends LinearLayout {
         //Init components
          imageview = (ImageView)viewlayout.findViewById(R.id.custom_button_image);
 
-         /*this.setOnTouchListener(new OnTouchListener() {
-             @Override
-             public boolean onTouch(View v, MotionEvent event) {
-                     tintImage(v);
-                     return performClick();
-             }
-         });*/
-
-
          textview = (TextView)viewlayout.findViewById(R.id.custom_button_textView);
 
         TypedArray ta = getContext().obtainStyledAttributes(attrs,R.styleable.CustomImageButton,0,0);
 
         try {
             setTextPosition(ta.getInt(R.styleable.CustomImageButton_textPosition,0));
-            setShowText( ta.getBoolean(R.styleable.CustomImageButton_showText, false));
+            setShowText( ta.getBoolean(R.styleable.CustomImageButton_showText, true));
             setText(ta.getText(R.styleable.CustomImageButton_text ));
             setImageSrc(ta.getString(R.styleable.CustomImageButton_imageSrc));
             setImageLength(ta.getString(R.styleable.CustomImageButton_imageLength ));
             setImageWidth(ta.getString(R.styleable.CustomImageButton_imageWidth ));
-            //setActivated(ta.getBoolean(R.style.act));
+            setEnabled(ta.getBoolean(R.styleable.CustomImageButton_android_enabled,true));
         } finally {
             ta.recycle();
         }
@@ -93,7 +85,6 @@ public class CustomImageButton extends LinearLayout {
         //Important! do this because inflated view was not attached to root.
         this.addView(viewlayout);
 
-        reDrawUI(true);
     }
 
     public void reDrawUI(boolean activated){
@@ -103,38 +94,13 @@ public class CustomImageButton extends LinearLayout {
         int bcgrnColor= ResourcesUtils.getColor(this,R.color.io_mtini_custom_button_background_color);
         int textColor = ResourcesUtils.getColor(this,R.color.io_mtini_custom_button_text_color);
 
-        int deac_bcgrnColor = ResourcesUtils.getColor(this,R.color.io_mtini_deactivate_custom_button_background_color);
-        int deac_textColor = ResourcesUtils.getColor(this,R.color.io_mtini_deactivate_custom_button_text_color);
-
-        /*
-        android.content.res.Resources.Theme theme = getContext().getTheme();
-
-        if (Build.VERSION.SDK_INT < 23) {
-
-            //use for backwards compatibility with API levels below 23
-             bcgrnColor = getResources().getColor(R.color.io_mtini_custom_button_background_color);
-             textColor = getResources().getColor(R.color.io_mtini_custom_button_text_color);
-
-             deac_bcgrnColor = getResources().getColor(R.color.io_mtini_deactivate_custom_button_background_color);
-             deac_textColor = getResources().getColor(R.color.io_mtini_deactivate_custom_button_text_color);
-
-        } else {
-
-             bcgrnColor = getResources().getColor(R.color.io_mtini_custom_button_background_color, theme);
-             textColor = getResources().getColor(R.color.io_mtini_custom_button_text_color, theme);
-
-            deac_bcgrnColor = getResources().getColor(R.color.io_mtini_deactivate_custom_button_background_color,theme);
-            deac_textColor = getResources().getColor(R.color.io_mtini_deactivate_custom_button_text_color,theme);
+        if(!activated) {
+            bcgrnColor = ResourcesUtils.getColor(this,R.color.io_mtini_deactivate_custom_button_background_color);
+            textColor = ResourcesUtils.getColor(this,R.color.io_mtini_deactivate_custom_button_text_color);
         }
-        */
 
-        if(activated) {
-            viewlayout.setBackgroundColor(bcgrnColor);
-            textview.setTextColor(textColor);
-        } else {
-            viewlayout.setBackgroundColor(deac_bcgrnColor);
-            textview.setTextColor(deac_textColor);
-        }
+        viewlayout.setBackgroundColor(bcgrnColor);
+        textview.setTextColor(textColor);
 
     }
 
@@ -163,7 +129,7 @@ public class CustomImageButton extends LinearLayout {
         try {
             direction = Direction.values()[textPosition];
         }catch(Exception e){
-            direction = Direction.text_top;
+            direction = Direction.none;
         }
 
         this.textPosition = textPosition;
@@ -171,25 +137,42 @@ public class CustomImageButton extends LinearLayout {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
+        RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+
         switch (direction){
             case text_top:
                 lp.addRule(RelativeLayout.BELOW, textview.getId());
-                lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 imageview.setLayoutParams(lp);
+                lp2.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                textview.setLayoutParams(lp2);
                 break;
             case text_left:
                 lp.addRule(RelativeLayout.RIGHT_OF, textview.getId());
-                lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                lp.addRule(RelativeLayout.CENTER_VERTICAL);
                 imageview.setLayoutParams(lp);
+                lp2.addRule(RelativeLayout.CENTER_VERTICAL);
+                textview.setLayoutParams(lp2);
                 break;
             case text_bottom:
                 lp.addRule(RelativeLayout.BELOW, imageview.getId());
-                lp.addRule(RelativeLayout.CENTER_IN_PARENT  );
+                lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 textview.setLayoutParams(lp);
+                lp2.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                imageview.setLayoutParams(lp2);
                 break;
             case text_right:
                 lp.addRule(RelativeLayout.RIGHT_OF, imageview.getId());
+                lp.addRule(RelativeLayout.CENTER_VERTICAL);
+                textview.setLayoutParams(lp);
+                lp2.addRule(RelativeLayout.CENTER_VERTICAL);
+                imageview.setLayoutParams(lp2);
+                break;
+            default:
                 lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                imageview.setLayoutParams(lp);
                 textview.setLayoutParams(lp);
                 break;
         }
@@ -265,21 +248,32 @@ public class CustomImageButton extends LinearLayout {
     }
 
     public void setText(CharSequence text) {
-        if(text==null)return;
-        textview.setText(text);
-        this.text = text;
+        if(text!=null && !text.toString().isEmpty() && showText) {
+            textview.setText(text);
+            this.text = text;
+        }else{
+            textview.setText(null);
+            this.text = null;
+        }
+
         invalidate();
         requestLayout();
     }
 
+    @Override
     public void setActivated(boolean activate){
         super.setActivated(activate);
         reDrawUI(activate);
+        invalidate();
+        requestLayout();
     }
 
+    @Override
     public void setEnabled(boolean enabled){
         super.setEnabled(enabled);
         reDrawUI(enabled);
+        invalidate();
+        requestLayout();
     }
 
     public void setClickable(boolean clickeable){
