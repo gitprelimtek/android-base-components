@@ -109,6 +109,7 @@ public class ActionBarUtilities {
         errorText.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(errorText==null)return;
                 errorText.setVisibility(View.VISIBLE);
                 errorText.setText(message);
             }
@@ -129,6 +130,7 @@ public class ActionBarUtilities {
         errorText.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(errorText==null)return;
                 errorText.setVisibility(View.VISIBLE);
                 errorText.setText(message);
             }
@@ -152,6 +154,7 @@ public class ActionBarUtilities {
         infoText.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(infoText==null)return;
                 infoText.setVisibility(View.VISIBLE);
                 infoText.setText(message);
                 hideDelayed(infoText);
@@ -163,6 +166,7 @@ public class ActionBarUtilities {
         view.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(view==null)return;
                 view.setVisibility(View.GONE);
             }
         },3000);
