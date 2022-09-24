@@ -1,5 +1,5 @@
 
-# android-base-components (Release_2.2.0)
+# android-base-components (Release_2.0.0)
 base components for building androidx (jetpack) apps.
 
 1. Custom components
